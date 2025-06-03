@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Gift Card Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fef2f2',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-pink-100 to-purple-100 dark:from-gray-900 dark:to-purple-900 transition-all duration-300">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-white mb-2">🎉 Birthday Card Generator</h1>
+            <p class="text-gray-600 dark:text-gray-300">Create beautiful personalized birthday cards</p>
+            
+            <!-- Theme Toggle -->
+            <button id="themeToggle" class="mt-4 px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                <span class="dark:hidden">🌙 Dark Mode</span>
+                <span class="hidden dark:inline">☀️ Light Mode</span>
+            </button>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Input Form -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">✨ Customize Your Card</h2>
+                
+                <div class="space-y-6">
+                    <!-- Name Input -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">👤 Birthday Person's Name</label>
+                        <input type="text" id="personName" placeholder="Enter name..." 
+                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+
+                    <!-- Age Input -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">🎂 Age (Optional)</label>
+                        <input type="number" id="age" placeholder="Enter age..." min="1" max="150"
+                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+
+                    <!-- Message Input -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">💌 Personal Message</label>
+                        <textarea id="message" placeholder="Write your birthday wishes..." rows="3"
+                                  class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"></textarea>
+                    </div>
+
+                    <!-- Photo Upload -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">📸 Photo (Optional)</label>
+                        <input type="file" id="photoInput" accept="image/*" 
+                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100">
+                    </div>
+
+                    <!-- Theme Color -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">🎨 Card Theme</label>
+                        <select id="cardTheme" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <option value="pink">💕 Pink & Purple</option>
+                            <option value="blue">💙 Blue & Cyan</option>
+                            <option value="green">💚 Green & Teal</option>
+                            <option value="orange">🧡 Orange & Yellow</option>
+                            <option value="rainbow">🌈 Rainbow</option>
+                        </select>
+                    </div>
+
+                    <!-- From Input -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">✍️ From (Your Name)</label>
+                        <input type="text" id="fromName" placeholder="Your name..." 
+                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Preview -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+                <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">🎁 Card Preview</h2>
+                
+                <!-- Card Canvas -->
+                <div class="flex justify-center mb-6">
+                    <canvas id="cardCanvas" width="600" height="800" class="border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-w-full h-auto"></canvas>
+                </div>
+
+                <!-- Download Button -->
+                <button id="downloadBtn" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    💾 Download Card
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference or default to light mode
+        const currentTheme = 'light'; // Default to light
+        html.classList.toggle('dark', false);
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+        });
+
+        // Canvas and card generation
+        const canvas = document.getElementById('cardCanvas');
+        const ctx = canvas.getContext('2d');
+        let uploadedImage = null;
+
+        // Theme colors
+        const themes = {
+            pink: {
+                gradient: ['#ec4899', '#8b5cf6'],
+                accent: '#f472b6',
+                text: '#ffffff'
+            },
+            blue: {
+                gradient: ['#3b82f6', '#06b6d4'],
+                accent: '#60a5fa',
+                text: '#ffffff'
+            },
+            green: {
+                gradient: ['#10b981', '#14b8a6'],
+                accent: '#34d399',
+                text: '#ffffff'
+            },
+            orange: {
+                gradient: ['#f59e0b', '#f97316'],
+                accent: '#fbbf24',
+                text: '#ffffff'
+            },
+            rainbow: {
+                gradient: ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981'],
+                accent: '#f472b6',
+                text: '#ffffff'
+            }
+        };
+
+        // Photo upload handler
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        uploadedImage = img;
+                        generateCard();
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Input event listeners
+        ['personName', 'age', 'message', 'cardTheme', 'fromName'].forEach(id => {
+            document.getElementById(id).addEventListener('input', generateCard);
+        });
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function createGradient(colors) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            colors.forEach((color, index) => {
+                gradient.addColorStop(index / (colors.length - 1), color);
+            });
+            return gradient;
+        }
+
+        function wrapText(text, x, y, maxWidth, lineHeight) {
+            const words = text.split(' ');
+            let line = '';
+            let currentY = y;
+
+            for (let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                const metrics = ctx.measureText(testLine);
+                const testWidth = metrics.width;
+                
+                if (testWidth > maxWidth && n > 0) {
+                    ctx.fillText(line, x, currentY);
+                    line = words[n] + ' ';
+                    currentY += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            ctx.fillText(line, x, currentY);
+            return currentY + lineHeight;
+        }
+
+        function generateCard() {
+            const name = document.getElementById('personName').value || 'Birthday Star';
+            const age = document.getElementById('age').value;
+            const message = document.getElementById('message').value || 'Wishing you a wonderful birthday filled with happiness and joy! 🎉';
+            const theme = document.getElementById('cardTheme').value;
+            const fromName = document.getElementById('fromName').value;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Get theme colors
+            const themeColors = themes[theme];
+
+            // Background gradient
+            const gradient = createGradient(themeColors.gradient);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Decorative elements
+            ctx.save();
+            ctx.globalAlpha = 0.1;
+            ctx.fillStyle = '#ffffff';
+            
+            // Draw circles
+            for (let i = 0; i < 8; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const radius = 20 + Math.random() * 40;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.restore();
+
+            // Photo section
+            let photoY = 80;
+            if (uploadedImage) {
+                const photoSize = 150;
+                const photoX = (canvas.width - photoSize) / 2;
+                
+                // Photo background circle
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, photoY + photoSize / 2, photoSize / 2 + 10, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fill();
+                
+                // Clip to circle for photo
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, photoY + photoSize / 2, photoSize / 2, 0, Math.PI * 2);
+                ctx.clip();
+                
+                // Draw photo
+                ctx.drawImage(uploadedImage, photoX, photoY, photoSize, photoSize);
+                ctx.restore();
+                
+                photoY += photoSize + 40;
+            }
+
+            // Main title
+            ctx.fillStyle = themeColors.text;
+            ctx.font = 'bold 48px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('🎉 Happy Birthday 🎉', canvas.width / 2, photoY + 40);
+
+            // Name
+            ctx.font = 'bold 42px Arial, sans-serif';
+            const nameY = photoY + 100;
+            ctx.fillText(name, canvas.width / 2, nameY);
+
+            // Age (if provided)
+            let ageY = nameY + 60;
+            if (age) {
+                ctx.font = 'bold 36px Arial, sans-serif';
+                ctx.fillText(`🎂 ${age} Years Young! 🎂`, canvas.width / 2, ageY);
+                ageY += 60;
+            }
+
+            // Message box
+            const messageY = ageY + 40;
+            const boxPadding = 30;
+            const boxWidth = canvas.width - 80;
+            const boxX = (canvas.width - boxWidth) / 2;
+            
+            // Message background
+            ctx.save();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.roundRect = function(x, y, width, height, radius) {
+                ctx.beginPath();
+                ctx.moveTo(x + radius, y);
+                ctx.lineTo(x + width - radius, y);
+                ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+                ctx.lineTo(x + width, y + height - radius);
+                ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+                ctx.lineTo(x + radius, y + height);
+                ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+                ctx.lineTo(x, y + radius);
+                ctx.quadraticCurveTo(x, y, x + radius, y);
+                ctx.closePath();
+            };
+            
+            const messageHeight = 120;
+            ctx.roundRect(boxX, messageY, boxWidth, messageHeight, 15);
+            ctx.fill();
+            
+            // Message text
+            ctx.fillStyle = '#333333';
+            ctx.font = '24px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            wrapText(message, canvas.width / 2, messageY + 40, boxWidth - 40, 32);
+            ctx.restore();
+
+            // From section
+            if (fromName) {
+                ctx.fillStyle = themeColors.text;
+                ctx.font = 'italic 28px Arial, sans-serif';
+                ctx.textAlign = 'right';
+                ctx.fillText(`💝 From: ${fromName}`, canvas.width - 40, canvas.height - 100);
+            }
+
+            // Watermark
+            ctx.save();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.font = '16px Arial, sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText('www.iamrohit.in', canvas.width - 20, canvas.height - 20);
+            ctx.restore();
+
+            // Decorative emojis
+            ctx.font = '30px Arial, sans-serif';
+            ctx.fillText('🎈', 50, 100);
+            ctx.fillText('🎁', canvas.width - 50, 150);
+            ctx.fillText('✨', 80, canvas.height - 150);
+            ctx.fillText('🎊', canvas.width - 80, canvas.height - 200);
+        }
+
+        // Download functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const link = document.createElement('a');
+            link.download = 'birthday-card.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+
+        // Generate initial card
+        generateCard();
+    </script>
+</body>
+</html>
