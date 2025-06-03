@@ -1,6 +1,6 @@
 # 🎂 Free Happy Birthday Card Maker - Create Beautiful Custom Cards Online
 
-![Birthday Card Maker Screenshot]([https://agecalculator.iamrohit.in/birthday-card-maker/screenshot.jpg](https://i.ibb.co/0jp9pXLC/Happy-Birthday-Card-Generator-Create-Custom-Birthday-Cards-Online-Free-03-06-2025-11-34.png))
+![Birthday Card Maker Screenshot]([https://i.ibb.co/0jp9pXLC/Happy-Birthday-Card-Generator-Create-Custom-Birthday-Cards-Online-Free-03-06-2025-11-34.png])
 
 ## 🌐 Demo
 
